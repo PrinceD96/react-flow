@@ -41,36 +41,34 @@ export const QueryInsightDetail = () => {
 	}
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-8">
 			{/* Header */}
 			<InsightHeader insight={insight} onBack={handleBack} />
 
-			{/* Content Grid */}
-			<div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-				{/* Left Column - SQL Queries & Recommendations */}
-				<div className="space-y-6">
-					{/* Unified Query Block with Tabs */}
-					<QueryTabsBlock
-						originalQuery={insight.original_query}
-						optimizedQuery={insight.optimized_query}
-					/>
+			{/* Top Section - SQL Queries in a horizontal layout */}
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<QueryTabsBlock
+					originalQuery={insight.original_query}
+					optimizedQuery={insight.optimized_query}
+				/>
+			</div>
 
-					{/* Recommendations */}
-					<RecommendationList
-						recommendations={insight.recommendations}
-						onRecommendationHover={setActiveRecommendation}
-						activeRecommendation={activeRecommendation}
-					/>
-				</div>
+			{/* Middle Section - Full Width Query Plan Visualization */}
+			<div className="w-full">
+				<QueryPlanVisualization
+					queryPlan={insight.query_plan_visualization}
+					highlightedNodeIds={highlightedNodeIds}
+					highlightedEdgeIds={highlightedEdgeIds}
+				/>
+			</div>
 
-				{/* Right Column - Query Plan Visualization */}
-				<div className="space-y-6">
-					<QueryPlanVisualization
-						queryPlan={insight.query_plan_visualization}
-						highlightedNodeIds={highlightedNodeIds}
-						highlightedEdgeIds={highlightedEdgeIds}
-					/>
-				</div>
+			{/* Bottom Section - Recommendations */}
+			<div className="max-w-4xl">
+				<RecommendationList
+					recommendations={insight.recommendations}
+					onRecommendationHover={setActiveRecommendation}
+					activeRecommendation={activeRecommendation}
+				/>
 			</div>
 		</div>
 	)

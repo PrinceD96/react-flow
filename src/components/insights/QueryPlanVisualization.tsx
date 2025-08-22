@@ -30,7 +30,7 @@ export const QueryPlanVisualization = ({
 						queryPlan={queryPlan}
 						highlightedNodeIds={highlightedNodeIds}
 						highlightedEdgeIds={highlightedEdgeIds}
-						className="h-[650px]"
+						className="h-[500px] w-full"
 					/>
 				) : (
 					<div className="h-[500px] flex items-center justify-center text-gray-500">
