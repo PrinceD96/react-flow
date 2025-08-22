@@ -1,9 +1,8 @@
-import { ArrowLeft, Code2, Zap, TrendingDown, Clock, Tag } from 'lucide-react'
+import { Code2, Zap, TrendingDown, Clock, Tag } from 'lucide-react'
 import { type Insight } from '../../types/insight'
 
 interface InsightHeaderProps {
 	insight: Insight
-	onBack: () => void
 }
 
 const getOptimizationIcon = (type: string) => {
@@ -47,17 +46,9 @@ const formatTimeAgo = (dateString?: string): string => {
 	return `${diffInWeeks}w ago`
 }
 
-export const InsightHeader = ({ insight, onBack }: InsightHeaderProps) => {
+export const InsightHeader = ({ insight }: InsightHeaderProps) => {
 	return (
 		<div>
-			<button
-				onClick={onBack}
-				className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors duration-200"
-			>
-				<ArrowLeft size={16} />
-				Back to insights
-			</button>
-
 			<div className="flex items-start justify-between">
 				<div className="flex-1">
 					<h1 className="text-3xl font-bold text-gray-900 mb-2">

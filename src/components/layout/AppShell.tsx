@@ -22,7 +22,18 @@ export const AppShell = ({ children }: AppShellProps) => {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div
+			className={`h-screen overflow-hidden bg-gray-50 ${
+				location.pathname.startsWith('/insights/QUERY/')
+					? 'overflow-hidden'
+					: ''
+			}`}
+			style={
+				{
+					'--sidebar-width': isSidebarExpanded ? '256px' : '64px'
+				} as React.CSSProperties
+			}
+		>
 			{/* Header with top navigation */}
 			<header className="bg-white border-b border-gray-200">
 				<div className="px-4 sm:px-6 lg:px-8">
@@ -176,12 +187,24 @@ export const AppShell = ({ children }: AppShellProps) => {
 				</aside>
 
 				{/* Main content area */}
-				<main className="flex-1 overflow-y-auto focus:outline-none transition-all duration-300 ease-in-out">
-					<div className="py-6">
-						<div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-							{children}
+				<main
+					className={`flex-1 focus:outline-none transition-all duration-300 ease-in-out ${
+						location.pathname.startsWith('/insights/QUERY/')
+							? 'overflow-hidden'
+							: 'overflow-y-auto'
+					}`}
+				>
+					{location.pathname.startsWith('/insights/QUERY/') ? (
+						// For query detail pages, render without any padding/constraints
+						children
+					) : (
+						// For other pages, use the standard layout
+						<div className="py-6">
+							<div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+								{children}
+							</div>
 						</div>
-					</div>
+					)}
 				</main>
 			</div>
 		</div>

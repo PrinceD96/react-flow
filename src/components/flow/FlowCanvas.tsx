@@ -134,7 +134,7 @@ export const FlowCanvas = ({
 	if (isLoading) {
 		return (
 			<div
-				className={`${className} bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center`}
+				className={`${className} bg-gray-50 flex items-center justify-center`}
 			>
 				<div className="text-center">
 					<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
@@ -147,7 +147,7 @@ export const FlowCanvas = ({
 	if (!queryPlan?.nodes?.length) {
 		return (
 			<div
-				className={`${className} bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center`}
+				className={`${className} bg-gray-50 flex items-center justify-center`}
 			>
 				<div className="text-center text-gray-500">
 					<div className="text-lg mb-2">No query plan available</div>
@@ -160,52 +160,45 @@ export const FlowCanvas = ({
 	}
 
 	return (
-		<div
-			className={`${className} bg-white rounded-lg border border-gray-200 overflow-hidden`}
-		>
-			<div style={{ width: '100%', height: '100%' }}>
-				<ReactFlow
-					nodes={nodes}
-					edges={edges}
-					onNodesChange={onNodesChange}
-					onEdgesChange={onEdgesChange}
-					onConnect={onConnect}
-					nodeTypes={nodeTypes}
-					fitView
-					fitViewOptions={{
-						padding: 0.3,
-						includeHiddenNodes: false
-					}}
-					defaultEdgeOptions={{
-						type: 'smoothstep'
-					}}
-					proOptions={{ hideAttribution: true }}
-				>
-					<Background
-						variant={BackgroundVariant.Dots}
-						gap={16}
-						size={1}
-						color="#e5e7eb"
-					/>
-					<Controls
-						showInteractive={false}
-						className="bg-white border border-gray-300 rounded-lg shadow-sm"
-					/>
-					<Panel position="top-right" className="m-2">
-						<button
-							onClick={loadQueryPlan}
-							disabled={isLoading}
-							className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 text-sm font-medium text-gray-700 disabled:opacity-50"
-						>
-							<RefreshCw
-								size={14}
-								className={isLoading ? 'animate-spin' : ''}
-							/>
-							Reflow Layout
-						</button>
-					</Panel>
-				</ReactFlow>
-			</div>
+		<div className={`${className}`} style={{ width: '100%', height: '100%' }}>
+			<ReactFlow
+				nodes={nodes}
+				edges={edges}
+				onNodesChange={onNodesChange}
+				onEdgesChange={onEdgesChange}
+				onConnect={onConnect}
+				nodeTypes={nodeTypes}
+				fitView
+				fitViewOptions={{
+					padding: 0.3,
+					includeHiddenNodes: false
+				}}
+				defaultEdgeOptions={{
+					type: 'smoothstep'
+				}}
+				proOptions={{ hideAttribution: true }}
+			>
+				<Background
+					variant={BackgroundVariant.Dots}
+					gap={16}
+					size={1}
+					color="#e5e7eb"
+				/>
+				<Controls
+					showInteractive={false}
+					className="bg-white border border-gray-300 rounded-lg shadow-sm"
+				/>
+				<Panel position="top-right" className="m-2">
+					<button
+						onClick={loadQueryPlan}
+						disabled={isLoading}
+						className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 text-sm font-medium text-gray-700 disabled:opacity-50"
+					>
+						<RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
+						Reflow Layout
+					</button>
+				</Panel>
+			</ReactFlow>
 		</div>
 	)
 }

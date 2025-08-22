@@ -14,38 +14,27 @@ export const QueryPlanVisualization = ({
 	highlightedEdgeIds
 }: QueryPlanVisualizationProps) => {
 	return (
-		<div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-			<div className="px-6 py-4 border-b border-gray-200">
-				<h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-					<Tag size={20} className="text-purple-600" />
-					Query Plan Visualization
-				</h2>
-				<p className="text-sm text-gray-600 mt-1">
-					Interactive visualization showing the query execution plan
-				</p>
-			</div>
-			<div className="p-6">
-				{queryPlan ? (
-					<FlowCanvas
-						queryPlan={queryPlan}
-						highlightedNodeIds={highlightedNodeIds}
-						highlightedEdgeIds={highlightedEdgeIds}
-						className="h-[500px] w-full"
-					/>
-				) : (
-					<div className="h-[500px] flex items-center justify-center text-gray-500">
-						<div className="text-center">
-							<Tag size={48} className="mx-auto mb-4 text-gray-300" />
-							<div className="text-lg font-medium text-gray-900 mb-2">
-								No visualization available
-							</div>
-							<div className="text-sm">
-								Query plan visualization is not available for this insight.
-							</div>
+		<div className="h-full w-full">
+			{queryPlan ? (
+				<FlowCanvas
+					queryPlan={queryPlan}
+					highlightedNodeIds={highlightedNodeIds}
+					highlightedEdgeIds={highlightedEdgeIds}
+					className="h-full w-full"
+				/>
+			) : (
+				<div className="h-full flex items-center justify-center text-gray-500 bg-gray-50">
+					<div className="text-center">
+						<Tag size={48} className="mx-auto mb-4 text-gray-300" />
+						<div className="text-lg font-medium text-gray-900 mb-2">
+							No visualization available
+						</div>
+						<div className="text-sm">
+							Query plan visualization is not available for this insight.
 						</div>
 					</div>
-				)}
-			</div>
+				</div>
+			)}
 		</div>
 	)
 }
