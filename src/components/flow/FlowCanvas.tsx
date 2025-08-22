@@ -84,15 +84,24 @@ export const FlowCanvas = ({
 	useEffect(() => {
 		if (nodes.length === 0) return
 
-		// Use React Flow's built-in selection for nodes
+		// Only update nodes if there are highlighted nodes to show
+		// Don't interfere with React Flow's built-in selection system
+		if (highlightedNodeIds.size === 0) return
+
+		// Use React Flow's built-in selection for nodes, but add custom data for highlighting
 		const updatedNodes = nodes.map((node) => ({
 			...node,
-			selected: highlightedNodeIds.has(node.id)
+			data: {
+				...node.data,
+				isHighlighted: highlightedNodeIds.has(node.id)
+			}
+			// Don't override the 'selected' property - let React Flow manage it
 		}))
 
-		// Check if selection actually changed to avoid unnecessary updates
+		// Check if highlighting actually changed to avoid unnecessary updates
 		const hasNodeChanges = updatedNodes.some(
-			(node, index) => node.selected !== nodes[index]?.selected
+			(node, index) =>
+				node.data.isHighlighted !== nodes[index]?.data.isHighlighted
 		)
 
 		if (hasNodeChanges) {
@@ -202,11 +211,7 @@ export const FlowCanvas = ({
 								isPanelOpen ? 'Hide details panel' : 'Show details panel'
 							}
 						>
-							{isPanelOpen ? (
-								<EyeOff size={16} />
-							) : (
-								<Eye size={16} />
-							)}
+							{isPanelOpen ? <EyeOff size={16} /> : <Eye size={16} />}
 						</ControlButton>
 					)}
 				</Controls>

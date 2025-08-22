@@ -4,37 +4,141 @@
 @tailwind utilities;
 
 :root {
-  --bg-color: rgb(17, 17, 17);
-  --text-color: rgb(243, 244, 246);
-  --node-border-radius: 10px;
-  --node-box-shadow: 10px 0 15px rgba(42, 138, 246, 0.3),
-    -10px 0 15px rgba(233, 42, 103, 0.3);
+	--bg-color: rgb(17, 17, 17);
+	--text-color: rgb(243, 244, 246);
+	--node-border-radius: 10px;
+	--node-box-shadow: 10px 0 15px rgba(42, 138, 246, 0.3),
+		-10px 0 15px rgba(233, 42, 103, 0.3);
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  @apply bg-gray-50 text-gray-900;
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	@apply bg-gray-50 text-gray-900;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Animated gradient border for selected nodes */
+.gradient-wrapper {
+	overflow: hidden;
+	display: flex;
+	padding: 2px;
+	position: relative;
+	border-radius: 12px;
+	flex-grow: 1;
+}
+
+/* Base selected state - applies to all selected nodes */
+.gradient-wrapper.selected {
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Node - Blue gradient */
+.gradient-wrapper.selected.table-gradient {
+	box-shadow: 10px 0 15px rgba(59, 130, 246, 0.3),
+		-10px 0 15px rgba(147, 197, 253, 0.3);
+}
+
+.gradient-wrapper.selected.table-gradient:before {
+	content: '';
+	position: absolute;
+	padding-bottom: calc(100% * 1.41421356237);
+	width: calc(100% * 1.41421356237);
+	background: conic-gradient(
+		from -160deg at 50% 50%,
+		#3b82f6 0deg,
+		#93c5fd 120deg,
+		#1d4ed8 240deg,
+		rgba(59, 130, 246, 0) 360deg
+	);
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(0deg);
+	border-radius: 100%;
+	animation: spinner 4s linear infinite;
+	z-index: -1;
+}
+
+/* Operation Node - Purple gradient */
+.gradient-wrapper.selected.operation-gradient {
+	box-shadow: 10px 0 15px rgba(147, 51, 234, 0.3),
+		-10px 0 15px rgba(196, 181, 253, 0.3);
+}
+
+.gradient-wrapper.selected.operation-gradient:before {
+	content: '';
+	position: absolute;
+	padding-bottom: calc(100% * 1.41421356237);
+	width: calc(100% * 1.41421356237);
+	background: conic-gradient(
+		from -160deg at 50% 50%,
+		#9333ea 0deg,
+		#c4b5fd 120deg,
+		#7c3aed 240deg,
+		rgba(147, 51, 234, 0) 360deg
+	);
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(0deg);
+	border-radius: 100%;
+	animation: spinner 4s linear infinite;
+	z-index: -1;
+}
+
+/* Result Node - Green gradient */
+.gradient-wrapper.selected.result-gradient {
+	box-shadow: 10px 0 15px rgba(34, 197, 94, 0.3),
+		-10px 0 15px rgba(134, 239, 172, 0.3);
+}
+
+.gradient-wrapper.selected.result-gradient:before {
+	content: '';
+	position: absolute;
+	padding-bottom: calc(100% * 1.41421356237);
+	width: calc(100% * 1.41421356237);
+	background: conic-gradient(
+		from -160deg at 50% 50%,
+		#22c55e 0deg,
+		#86efac 120deg,
+		#16a34a 240deg,
+		rgba(34, 197, 94, 0) 360deg
+	);
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(0deg);
+	border-radius: 100%;
+	animation: spinner 4s linear infinite;
+	z-index: -1;
+}
+
+@keyframes spinner {
+	0% {
+		transform: translate(-50%, -50%) rotate(0deg);
+	}
+	100% {
+		transform: translate(-50%, -50%) rotate(-360deg);
+	}
 }

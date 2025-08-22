@@ -17,44 +17,75 @@ const getNodeIcon = (nodeType: string) => {
 }
 
 const getNodeStyles = (nodeType: string, isHighlighted: boolean) => {
-	const baseClasses =
-		'px-4 py-3 rounded-lg border-2 bg-white shadow-lg transition-all duration-200 hover:shadow-xl min-w-[140px]'
+	// Always use gradient-wrapper structure to prevent layout jumps
+	const baseWrapper = 'gradient-wrapper'
 
 	if (isHighlighted) {
-		return `${baseClasses} border-orange-400 bg-orange-50 ring-2 ring-orange-200`
+		// Add node-type-specific gradient classes
+		let gradientClass = ''
+		switch (nodeType) {
+			case 'tableNode':
+				gradientClass = 'table-gradient'
+				break
+			case 'operationNode':
+				gradientClass = 'operation-gradient'
+				break
+			case 'resultNode':
+				gradientClass = 'result-gradient'
+				break
+			default:
+				// For default/unknown node types, use table gradient as fallback
+				gradientClass = 'table-gradient'
+		}
+		return `${baseWrapper} selected ${gradientClass}`
 	}
 
+	return baseWrapper
+}
+
+const getInnerNodeStyles = (nodeType: string, isHighlighted: boolean) => {
+	// Always provide the same base styling for consistent layout
+	const baseInnerClasses =
+		'px-4 py-3 rounded-lg bg-white shadow-lg min-w-[140px] relative flex-grow border-2'
+
+	if (isHighlighted) {
+		// Selected nodes: transparent border to maintain same dimensions as unselected
+		return `${baseInnerClasses} border-transparent`
+	}
+
+	// Unselected nodes: visible type-specific borders
 	switch (nodeType) {
 		case 'tableNode':
-			return `${baseClasses} border-blue-200 hover:border-blue-300`
+			return `${baseInnerClasses} border-blue-200 hover:border-blue-300 transition-all duration-200 hover:shadow-xl`
 		case 'operationNode':
-			return `${baseClasses} border-purple-200 hover:border-purple-300`
+			return `${baseInnerClasses} border-purple-200 hover:border-purple-300 transition-all duration-200 hover:shadow-xl`
 		case 'resultNode':
-			return `${baseClasses} border-green-200 hover:border-green-300`
+			return `${baseInnerClasses} border-green-200 hover:border-green-300 transition-all duration-200 hover:shadow-xl`
 		default:
-			return `${baseClasses} border-gray-200 hover:border-gray-300`
+			return `${baseInnerClasses} border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-xl`
 	}
 }
 
 const TableNode = memo(({ data, selected }: NodeProps) => {
 	const nodeData = data as FlowNodeData
-	// Use React Flow's built-in selection system for clean highlighting
 	const isHighlighted = selected
 
 	return (
 		<>
 			<div className={getNodeStyles(nodeData.type, isHighlighted)}>
-				<div className="flex items-center gap-2">
-					{getNodeIcon(nodeData.type)}
-					<div className="flex-1">
-						<div className="font-medium text-sm text-gray-900 leading-tight">
-							{nodeData.label}
-						</div>
-						{nodeData.recommendation_id && (
-							<div className="text-xs text-orange-600 mt-1 font-medium">
-								Optimization Available
+				<div className={getInnerNodeStyles(nodeData.type, isHighlighted)}>
+					<div className="flex items-center gap-2">
+						{getNodeIcon(nodeData.type)}
+						<div className="flex-1">
+							<div className="font-medium text-sm text-gray-900 leading-tight">
+								{nodeData.label}
 							</div>
-						)}
+							{nodeData.recommendation_id && (
+								<div className="text-xs text-orange-600 mt-1 font-medium">
+									Optimization Available
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -79,17 +110,19 @@ const OperationNode = memo(({ data, selected }: NodeProps) => {
 	return (
 		<>
 			<div className={getNodeStyles(nodeData.type, isHighlighted)}>
-				<div className="flex items-center gap-2">
-					{getNodeIcon(nodeData.type)}
-					<div className="flex-1">
-						<div className="font-medium text-sm text-gray-900 leading-tight">
-							{nodeData.label}
-						</div>
-						{nodeData.recommendation_id && (
-							<div className="text-xs text-orange-600 mt-1 font-medium">
-								Recommended Change
+				<div className={getInnerNodeStyles(nodeData.type, isHighlighted)}>
+					<div className="flex items-center gap-2">
+						{getNodeIcon(nodeData.type)}
+						<div className="flex-1">
+							<div className="font-medium text-sm text-gray-900 leading-tight">
+								{nodeData.label}
 							</div>
-						)}
+							{nodeData.recommendation_id && (
+								<div className="text-xs text-orange-600 mt-1 font-medium">
+									Recommended Change
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -114,11 +147,13 @@ const ResultNode = memo(({ data, selected }: NodeProps) => {
 	return (
 		<>
 			<div className={getNodeStyles(nodeData.type, isHighlighted)}>
-				<div className="flex items-center gap-2">
-					{getNodeIcon(nodeData.type)}
-					<div className="flex-1">
-						<div className="font-medium text-sm text-gray-900 leading-tight">
-							{nodeData.label}
+				<div className={getInnerNodeStyles(nodeData.type, isHighlighted)}>
+					<div className="flex items-center gap-2">
+						{getNodeIcon(nodeData.type)}
+						<div className="flex-1">
+							<div className="font-medium text-sm text-gray-900 leading-tight">
+								{nodeData.label}
+							</div>
 						</div>
 					</div>
 				</div>
