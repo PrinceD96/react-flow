@@ -10,7 +10,7 @@ import { QueryTabsBlock } from '../components/insights/QueryTabsBlock'
 import { QueryPlanVisualization } from '../components/insights/QueryPlanVisualization'
 import { InsightDetailLoading } from '../components/insights/InsightDetailLoading'
 import { InsightDetailError } from '../components/insights/InsightDetailError'
-import { Info, Code, Lightbulb, X, ChevronLeft } from 'lucide-react'
+import { Info, Code, Play, X, ChevronLeft } from 'lucide-react'
 
 interface QueryInsightDetailParams {
 	id: string
@@ -135,8 +135,8 @@ export const QueryInsightDetail = () => {
 									}`}
 								>
 									<div className="flex items-center justify-center gap-2">
-										<Lightbulb size={16} />
-										Tips
+										<Play size={16} />
+										Actions
 									</div>
 								</button>
 							</nav>

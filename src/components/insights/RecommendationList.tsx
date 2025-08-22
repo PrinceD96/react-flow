@@ -71,13 +71,6 @@ export const RecommendationList = memo(
 
 		return (
 			<div className="space-y-4">
-				<div className="flex items-center gap-2 mb-4">
-					<Lightbulb size={20} className="text-yellow-600" />
-					<h2 className="text-lg font-semibold text-gray-900">
-						Recommendations ({recommendations.length})
-					</h2>
-				</div>
-
 				<div className="space-y-4">
 					{recommendations.map((recommendation, index) => (
 						<div
