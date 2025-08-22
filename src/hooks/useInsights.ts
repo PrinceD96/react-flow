@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { type Insight, type InsightType } from '../types/insight'
-import {
-	mockInsights,
-	getInsightById,
-	getInsightsByType
-} from '../data/mockInsights'
+import { insightsApi, insightsQueryKeys } from '../services/insightsApi'
 
 export interface UseInsightsListResult {
 	insights: Insight[]
@@ -15,32 +12,27 @@ export interface UseInsightsListResult {
 }
 
 export const useInsightsList = (): UseInsightsListResult => {
-	const [insights, setInsights] = useState<Insight[]>([])
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState<string | null>(null)
 	const [currentFilter, setCurrentFilter] = useState<InsightType | 'ALL'>('ALL')
 
-	useEffect(() => {
-		// Simulate API loading
-		setLoading(true)
-		const timer = setTimeout(() => {
-			try {
-				if (currentFilter === 'ALL') {
-					setInsights(mockInsights)
-				} else {
-					setInsights(getInsightsByType(currentFilter))
-				}
-				setError(null)
-			} catch (err) {
-				setError('Failed to load insights')
-				setInsights([])
-			} finally {
-				setLoading(false)
+	// Query for all insights or filtered insights
+	const {
+		data: insights = [],
+		isLoading: loading,
+		error
+	} = useQuery({
+		queryKey: insightsQueryKeys.list(
+			currentFilter === 'ALL' ? undefined : currentFilter
+		),
+		queryFn: () => {
+			if (currentFilter === 'ALL') {
+				return insightsApi.getInsights()
+			} else {
+				return insightsApi.getInsightsByType(currentFilter)
 			}
-		}, 500) // Simulate network delay
-
-		return () => clearTimeout(timer)
-	}, [currentFilter])
+		},
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		cacheTime: 10 * 60 * 1000 // 10 minutes
+	})
 
 	const filterByType = (type: InsightType | 'ALL') => {
 		setCurrentFilter(type)
@@ -49,7 +41,7 @@ export const useInsightsList = (): UseInsightsListResult => {
 	return {
 		insights,
 		loading,
-		error,
+		error: error ? 'Failed to load insights' : null,
 		filterByType,
 		currentFilter
 	}
@@ -62,37 +54,22 @@ export interface UseInsightDetailResult {
 }
 
 export const useInsightDetail = (id: string): UseInsightDetailResult => {
-	const [insight, setInsight] = useState<Insight | null>(null)
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState<string | null>(null)
-
-	useEffect(() => {
-		setLoading(true)
-		const timer = setTimeout(() => {
-			try {
-				const foundInsight = getInsightById(id)
-				if (foundInsight) {
-					setInsight(foundInsight)
-					setError(null)
-				} else {
-					setError('Insight not found')
-					setInsight(null)
-				}
-			} catch (err) {
-				setError('Failed to load insight details')
-				setInsight(null)
-			} finally {
-				setLoading(false)
-			}
-		}, 300)
-
-		return () => clearTimeout(timer)
-	}, [id])
+	const {
+		data: insight = null,
+		isLoading: loading,
+		error
+	} = useQuery({
+		queryKey: insightsQueryKeys.detail(id),
+		queryFn: () => insightsApi.getInsightById(id),
+		enabled: !!id, // Only run query if id exists
+		staleTime: 10 * 60 * 1000, // 10 minutes - details are less likely to change
+		cacheTime: 15 * 60 * 1000 // 15 minutes
+	})
 
 	return {
 		insight,
 		loading,
-		error
+		error: error ? 'Failed to load insight details' : null
 	}
 }
 
