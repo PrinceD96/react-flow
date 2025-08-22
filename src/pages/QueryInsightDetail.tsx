@@ -10,7 +10,7 @@ import { QueryTabsBlock } from '../components/insights/QueryTabsBlock'
 import { QueryPlanVisualization } from '../components/insights/QueryPlanVisualization'
 import { InsightDetailLoading } from '../components/insights/InsightDetailLoading'
 import { InsightDetailError } from '../components/insights/InsightDetailError'
-import { Info, Code, Play, X, ChevronLeft } from 'lucide-react'
+import { Info, Code, Play, X } from 'lucide-react'
 
 interface QueryInsightDetailParams {
 	id: string
@@ -58,20 +58,8 @@ export const QueryInsightDetail = () => {
 					highlightedNodeIds={highlightedNodeIds}
 					highlightedEdgeIds={highlightedEdgeIds}
 					onTogglePanel={() => setIsPanelOpen(!isPanelOpen)}
+					isPanelOpen={isPanelOpen}
 				/>
-
-				{/* Toggle Button - Fixed position to open panel */}
-				{!isPanelOpen && (
-					<button
-						onClick={() => setIsPanelOpen(true)}
-						className="fixed top-1/2 right-6 transform -translate-y-1/2 bg-white border border-gray-300 rounded-l-xl px-3 py-8 shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200 z-50 group"
-					>
-						<ChevronLeft
-							size={20}
-							className="text-gray-600 transform rotate-180 group-hover:text-blue-600 transition-colors duration-200"
-						/>
-					</button>
-				)}
 
 				{/* Right Sliding Panel */}
 				<div

@@ -7,8 +7,10 @@ import {
 	useNodesState,
 	useEdgesState,
 	type OnConnect,
-	addEdge
+	addEdge,
+	ControlButton
 } from '@xyflow/react'
+import { Eye, EyeOff } from 'lucide-react'
 import { TableNode, OperationNode, ResultNode } from './CustomNodes'
 import {
 	planGraphAdapter,
@@ -22,6 +24,8 @@ interface FlowCanvasProps {
 	highlightedNodeIds: Set<string>
 	highlightedEdgeIds: Set<string>
 	className?: string
+	onTogglePanel?: () => void
+	isPanelOpen?: boolean
 }
 
 const nodeTypes = {
@@ -34,7 +38,9 @@ export const FlowCanvas = ({
 	queryPlan,
 	highlightedNodeIds,
 	highlightedEdgeIds,
-	className = 'h-96'
+	className = 'h-96',
+	onTogglePanel,
+	isPanelOpen = true
 }: FlowCanvasProps) => {
 	const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<FlowEdge>([])
@@ -187,7 +193,23 @@ export const FlowCanvas = ({
 					orientation="horizontal"
 					showInteractive={false}
 					className="bg-white border border-gray-300 rounded-lg shadow-sm"
-				/>
+				>
+					{onTogglePanel && (
+						<ControlButton
+							onClick={onTogglePanel}
+							title={isPanelOpen ? 'Hide details panel' : 'Show details panel'}
+							aria-label={
+								isPanelOpen ? 'Hide details panel' : 'Show details panel'
+							}
+						>
+							{isPanelOpen ? (
+								<EyeOff size={16} />
+							) : (
+								<Eye size={16} />
+							)}
+						</ControlButton>
+					)}
+				</Controls>
 			</ReactFlow>
 		</div>
 	)

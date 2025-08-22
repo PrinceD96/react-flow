@@ -7,13 +7,15 @@ interface QueryPlanVisualizationProps {
 	highlightedNodeIds: Set<string>
 	highlightedEdgeIds: Set<string>
 	onTogglePanel?: () => void
+	isPanelOpen?: boolean
 }
 
 export const QueryPlanVisualization = ({
 	queryPlan,
 	highlightedNodeIds,
 	highlightedEdgeIds,
-	onTogglePanel
+	onTogglePanel,
+	isPanelOpen
 }: QueryPlanVisualizationProps) => {
 	return (
 		<div className="h-full w-full">
@@ -24,6 +26,7 @@ export const QueryPlanVisualization = ({
 					highlightedEdgeIds={highlightedEdgeIds}
 					className="h-full w-full"
 					onTogglePanel={onTogglePanel}
+					isPanelOpen={isPanelOpen}
 				/>
 			) : (
 				<div className="h-full flex items-center justify-center text-gray-500 bg-gray-50">

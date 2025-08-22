@@ -54,9 +54,6 @@ export const AppShell = ({ children }: AppShellProps) => {
 							</div>
 							<h1 className="text-lg font-bold text-gray-900">Insights</h1>
 						</div>
-
-						{/* Environment indicator */}
-						<div className="text-sm text-gray-600">Demo Environment</div>
 					</div>
 				</div>
 			</header>
@@ -154,11 +151,7 @@ export const AppShell = ({ children }: AppShellProps) => {
 								!isSidebarExpanded ? 'hidden' : ''
 							}`}
 						>
-							<div className="p-4 flex items-center justify-between">
-								<div className="text-xs text-gray-500">
-									<div className="font-medium">PRD1 - Foundations Demo</div>
-									<div className="mt-0.5">React Flow + Tailwind CSS</div>
-								</div>
+							<div className="p-4 flex items-center justify-end">
 								<button
 									onClick={toggleSidebar}
 									className="p-1.5 rounded-md text-gray-500 hover:text-blue-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-150"
