@@ -8,14 +8,10 @@ function App() {
     <Router>
       <AppShell>
         <Switch>
+          <Route path="/insights/QUERY/:id" component={QueryInsightDetail} />
+          <Route exact path="/insights" component={InsightsDashboard} />
           <Route exact path="/">
             <Redirect to="/insights" />
-          </Route>
-          <Route exact path="/insights">
-            <InsightsDashboard />
-          </Route>
-          <Route exact path="/insights/QUERY/:id">
-            <QueryInsightDetail />
           </Route>
           <Route path="*">
             <Redirect to="/insights" />

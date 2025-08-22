@@ -7,6 +7,7 @@ export const InsightsDashboard = () => {
   const { insights, loading, error, filterByType, currentFilter } = useInsightsList();
 
   const handleInsightClick = (id: string) => {
+    console.log('Navigating to insight:', id);
     history.push(`/insights/QUERY/${id}`);
   };
 

@@ -50,6 +50,9 @@ const formatTimeAgo = (dateString?: string): string => {
 export const QueryInsightDetail = () => {
   const { id } = useParams<QueryInsightDetailParams>();
   const history = useHistory();
+  
+  console.log('QueryInsightDetail mounted with id:', id);
+  
   const { insight, loading, error } = useInsightDetail(id);
   const { 
     highlightedNodeIds, 

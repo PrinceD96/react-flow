@@ -119,6 +119,8 @@ Deliver a multi-page frontend demo for **Snowflake Insights** with:
 
 6. **SaaS UI & Visual Language**
 
+   - React (v17.0.2)
+   - React DOM (v17.0.2)
    - Tailwind theme (v3.4.17) + tailwind-merge v2.5.2.
    - If you want to overwrite default styles, make sure to import Tailwinds
      entry point after React Flows base styles.
