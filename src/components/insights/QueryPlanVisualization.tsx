@@ -6,12 +6,14 @@ interface QueryPlanVisualizationProps {
 	queryPlan?: QueryPlanVisualizationType
 	highlightedNodeIds: Set<string>
 	highlightedEdgeIds: Set<string>
+	onTogglePanel?: () => void
 }
 
 export const QueryPlanVisualization = ({
 	queryPlan,
 	highlightedNodeIds,
-	highlightedEdgeIds
+	highlightedEdgeIds,
+	onTogglePanel
 }: QueryPlanVisualizationProps) => {
 	return (
 		<div className="h-full w-full">
@@ -21,6 +23,7 @@ export const QueryPlanVisualization = ({
 					highlightedNodeIds={highlightedNodeIds}
 					highlightedEdgeIds={highlightedEdgeIds}
 					className="h-full w-full"
+					onTogglePanel={onTogglePanel}
 				/>
 			) : (
 				<div className="h-full flex items-center justify-center text-gray-500 bg-gray-50">

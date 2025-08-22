@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { Code2, Zap } from 'lucide-react'
+import {
+	ArrowDown,
+	AlertTriangle,
+	CheckCircle2,
+	Copy,
+	Check
+} from 'lucide-react'
 
 interface QueryTabsBlockProps {
 	originalQuery?: string
@@ -10,93 +16,93 @@ export const QueryTabsBlock = ({
 	originalQuery,
 	optimizedQuery
 }: QueryTabsBlockProps) => {
-	const [activeQueryTab, setActiveQueryTab] = useState<'current' | 'optimized'>(
-		'current'
-	)
+	const [copiedQuery, setCopiedQuery] = useState<string | null>(null)
 
-	if (!originalQuery && !optimizedQuery) {
+	const copyToClipboard = async (text: string, queryType: string) => {
+		try {
+			await navigator.clipboard.writeText(text)
+			setCopiedQuery(queryType)
+			setTimeout(() => setCopiedQuery(null), 2000)
+		} catch (err) {
+			console.error('Failed to copy text: ', err)
+		}
+	}
+
+	if (!originalQuery || !optimizedQuery) {
 		return null
 	}
 
 	return (
-		<div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-			{/* Tab Navigation */}
-			<div className="flex border-b border-gray-200 bg-gray-50">
-				{originalQuery && (
-					<button
-						onClick={() => setActiveQueryTab('current')}
-						className={`flex-1 px-6 py-4 text-left font-medium transition-all duration-200 ${
-							activeQueryTab === 'current'
-								? 'bg-white text-red-900 border-b-2 border-red-500 shadow-sm -mb-px'
-								: 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-						}`}
-					>
-						<div className="flex items-center gap-3">
-							<Code2
-								size={20}
-								className={
-									activeQueryTab === 'current'
-										? 'text-red-600'
-										: 'text-gray-400'
-								}
-							/>
-							<div>
-								<div className="font-semibold text-base">Current Query</div>
-								<div className="text-xs opacity-75">
-									Original query needing optimization
-								</div>
-							</div>
+		<div className="h-full flex flex-col bg-white">
+			{/* Content Area - Optimized for vertical stack */}
+			<div className="flex-1 overflow-y-auto p-3 space-y-3">
+				{/* Current Query */}
+				<div className="bg-red-50 border-l-4 border-red-400 p-3 rounded">
+					<div className="flex items-start gap-2 mb-2">
+						<AlertTriangle
+							size={14}
+							className="text-red-600 mt-0.5 flex-shrink-0"
+						/>
+						<div className="min-w-0 flex-1">
+							<h4 className="text-sm font-medium text-red-900">Current</h4>
+							<p className="text-xs text-red-700 mt-1">Needs optimization</p>
 						</div>
-					</button>
-				)}
-				{optimizedQuery && (
-					<button
-						onClick={() => setActiveQueryTab('optimized')}
-						className={`flex-1 px-6 py-4 text-left font-medium transition-all duration-200 ${
-							activeQueryTab === 'optimized'
-								? 'bg-white text-green-900 border-b-2 border-green-500 shadow-sm -mb-px'
-								: 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-						}`}
-					>
-						<div className="flex items-center gap-3">
-							<Zap
-								size={20}
-								className={
-									activeQueryTab === 'optimized'
-										? 'text-green-600'
-										: 'text-gray-400'
-								}
-							/>
-							<div>
-								<div className="font-semibold text-base">Optimized Query</div>
-								<div className="text-xs opacity-75">
-									Recommended optimized version
-								</div>
-							</div>
-						</div>
-					</button>
-				)}
-			</div>
-
-			{/* Tab Content */}
-			<div className="p-6">
-				{/* Current Query Content */}
-				{activeQueryTab === 'current' && originalQuery && (
-					<div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
-						<pre className="text-sm text-gray-800 overflow-x-auto">
-							<code>{originalQuery}</code>
+					</div>
+					<div className="bg-gray-100 border border-gray-200 rounded p-2 mt-2 overflow-x-auto relative group">
+						<button
+							onClick={() => copyToClipboard(originalQuery, 'original')}
+							className="absolute top-2 right-2 p-1 bg-white border border-gray-300 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+							title="Copy query"
+						>
+							{copiedQuery === 'original' ? (
+								<Check size={14} className="text-green-600" />
+							) : (
+								<Copy size={14} className="text-gray-600" />
+							)}
+						</button>
+						<pre className="text-xs whitespace-pre-wrap pr-8">
+							{originalQuery}
 						</pre>
 					</div>
-				)}
+				</div>
 
-				{/* Optimized Query Content */}
-				{activeQueryTab === 'optimized' && optimizedQuery && (
-					<div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
-						<pre className="text-sm text-gray-800 overflow-x-auto">
-							<code>{optimizedQuery}</code>
+				{/* Arrow indicator */}
+				<div className="flex justify-center py-1">
+					<div className="flex items-center gap-2 text-xs text-gray-500">
+						<ArrowDown size={14} />
+						<span>Optimized</span>
+					</div>
+				</div>
+
+				{/* Optimized Query */}
+				<div className="bg-green-50 border-l-4 border-green-400 p-3 rounded">
+					<div className="flex items-start gap-2 mb-2">
+						<CheckCircle2
+							size={14}
+							className="text-green-600 mt-0.5 flex-shrink-0"
+						/>
+						<div className="min-w-0 flex-1">
+							<h4 className="text-sm font-medium text-green-900">Improved</h4>
+							<p className="text-xs text-green-700 mt-1">Better performance</p>
+						</div>
+					</div>
+					<div className="bg-gray-100 border border-gray-200 rounded p-2 mt-2 overflow-x-auto relative group">
+						<button
+							onClick={() => copyToClipboard(optimizedQuery, 'optimized')}
+							className="absolute top-2 right-2 p-1 bg-white border border-gray-300 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+							title="Copy query"
+						>
+							{copiedQuery === 'optimized' ? (
+								<Check size={14} className="text-green-600" />
+							) : (
+								<Copy size={14} className="text-gray-600" />
+							)}
+						</button>
+						<pre className="text-xs whitespace-pre-wrap pr-8">
+							{optimizedQuery}
 						</pre>
 					</div>
-				)}
+				</div>
 			</div>
 		</div>
 	)

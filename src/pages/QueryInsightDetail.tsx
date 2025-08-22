@@ -10,7 +10,7 @@ import { QueryTabsBlock } from '../components/insights/QueryTabsBlock'
 import { QueryPlanVisualization } from '../components/insights/QueryPlanVisualization'
 import { InsightDetailLoading } from '../components/insights/InsightDetailLoading'
 import { InsightDetailError } from '../components/insights/InsightDetailError'
-import { Info, Code, Lightbulb } from 'lucide-react'
+import { Info, Code, Lightbulb, X, ChevronLeft } from 'lucide-react'
 
 interface QueryInsightDetailParams {
 	id: string
@@ -22,6 +22,7 @@ export const QueryInsightDetail = () => {
 	const { id } = useParams<QueryInsightDetailParams>()
 	const history = useHistory()
 	const [activeTab, setActiveTab] = useState<TabType>('overview')
+	const [isPanelOpen, setIsPanelOpen] = useState(true)
 
 	console.log('QueryInsightDetail mounted with id:', id)
 
@@ -50,87 +51,114 @@ export const QueryInsightDetail = () => {
 			className="fixed top-16 right-0 bottom-0 z-40 bg-gray-50 border-l border-gray-200"
 			style={{ left: 'var(--sidebar-width)' }}
 		>
-			{/* Top Section - Query Plan Visualization (55% of remaining viewport height) - Edge to Edge */}
-			<div className="absolute top-0 left-0 right-0 h-[55%] z-0 transition-all duration-300 ease-in-out">
+			{/* Main Content Area - Query Plan Visualization */}
+			<div className="h-full relative">
 				<QueryPlanVisualization
 					queryPlan={insight.query_plan_visualization}
 					highlightedNodeIds={highlightedNodeIds}
 					highlightedEdgeIds={highlightedEdgeIds}
+					onTogglePanel={() => setIsPanelOpen(!isPanelOpen)}
 				/>
-			</div>
 
-			{/* Bottom Section - Dock Panel (45% of remaining viewport height) - Positioned below the fixed visualization */}
-			<div className="absolute bottom-0 left-0 right-0 h-[45%] bg-gray-50 border-t border-gray-200 overflow-hidden transition-all duration-300 ease-in-out z-10">
-				<div className="h-full flex flex-col">
-					{/* Tab Navigation */}
-					<div className="flex-shrink-0 bg-white border-b border-gray-200">
-						<div className="px-6">
+				{/* Toggle Button - Fixed position to open panel */}
+				{!isPanelOpen && (
+					<button
+						onClick={() => setIsPanelOpen(true)}
+						className="fixed top-1/2 right-6 transform -translate-y-1/2 bg-white border border-gray-300 rounded-l-xl px-3 py-8 shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200 z-50 group"
+					>
+						<ChevronLeft
+							size={20}
+							className="text-gray-600 transform rotate-180 group-hover:text-blue-600 transition-colors duration-200"
+						/>
+					</button>
+				)}
+
+				{/* Right Sliding Panel */}
+				<div
+					className={`fixed top-20 right-4 bottom-4 w-96 bg-white rounded-xl border border-gray-200 shadow-2xl transform transition-all duration-300 ease-in-out z-40 ${
+						isPanelOpen
+							? 'translate-x-0 opacity-100 visible'
+							: 'translate-x-[calc(100%+2rem)] opacity-0 invisible'
+					}`}
+				>
+					<div className="h-full flex flex-col rounded-xl overflow-hidden">
+						{/* Panel Header with Close Button */}
+						<div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-3 rounded-t-xl">
 							<div className="flex items-center justify-between">
-								<nav className="flex space-x-8" aria-label="Tabs">
-									<button
-										onClick={() => setActiveTab('overview')}
-										className={`py-4 px-1 border-b-2 font-medium text-sm ${
-											activeTab === 'overview'
-												? 'border-orange-500 text-orange-600'
-												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-										}`}
-									>
-										<div className="flex items-center gap-2">
-											<Info size={16} />
-											Overview
-										</div>
-									</button>
-									<button
-										onClick={() => setActiveTab('queries')}
-										className={`py-4 px-1 border-b-2 font-medium text-sm ${
-											activeTab === 'queries'
-												? 'border-orange-500 text-orange-600'
-												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-										}`}
-									>
-										<div className="flex items-center gap-2">
-											<Code size={16} />
-											SQL Queries
-										</div>
-									</button>
-									<button
-										onClick={() => setActiveTab('recommendations')}
-										className={`py-4 px-1 border-b-2 font-medium text-sm ${
-											activeTab === 'recommendations'
-												? 'border-orange-500 text-orange-600'
-												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-										}`}
-									>
-										<div className="flex items-center gap-2">
-											<Lightbulb size={16} />
-											Recommendations ({insight.recommendations.length})
-										</div>
-									</button>
-								</nav>
+								<h2 className="text-lg font-semibold text-gray-900">
+									Insight Details
+								</h2>
+								<button
+									onClick={() => setIsPanelOpen(false)}
+									className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+								>
+									<X size={20} />
+								</button>
 							</div>
 						</div>
-					</div>
 
-					{/* Tab Content */}
-					<div className="flex-1 overflow-y-auto">
-						<div className="p-6">
+						{/* Tab Navigation */}
+						<div className="flex-shrink-0 bg-white border-b border-gray-200">
+							<nav className="flex px-4" aria-label="Tabs">
+								<button
+									onClick={() => setActiveTab('overview')}
+									className={`py-3 px-4 border-b-2 font-medium text-sm transition-colors flex-1 ${
+										activeTab === 'overview'
+											? 'border-blue-500 text-blue-600'
+											: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+									}`}
+								>
+									<div className="flex items-center justify-center gap-2">
+										<Info size={16} />
+										Overview
+									</div>
+								</button>
+								<button
+									onClick={() => setActiveTab('queries')}
+									className={`py-3 px-4 border-b-2 font-medium text-sm transition-colors flex-1 ${
+										activeTab === 'queries'
+											? 'border-blue-500 text-blue-600'
+											: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+									}`}
+								>
+									<div className="flex items-center justify-center gap-2">
+										<Code size={16} />
+										Queries
+									</div>
+								</button>
+								<button
+									onClick={() => setActiveTab('recommendations')}
+									className={`py-3 px-4 border-b-2 font-medium text-sm transition-colors flex-1 ${
+										activeTab === 'recommendations'
+											? 'border-blue-500 text-blue-600'
+											: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+									}`}
+								>
+									<div className="flex items-center justify-center gap-2">
+										<Lightbulb size={16} />
+										Tips
+									</div>
+								</button>
+							</nav>
+						</div>
+
+						{/* Tab Content - Scrollable */}
+						<div className="flex-1 overflow-y-auto bg-gray-50 rounded-b-xl">
 							{activeTab === 'overview' && (
-								<div className="max-w-4xl">
+								<div className="p-4">
 									<InsightHeader insight={insight} />
 								</div>
 							)}
 
 							{activeTab === 'queries' && (
-								<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-									<QueryTabsBlock
-										originalQuery={insight.original_query}
-										optimizedQuery={insight.optimized_query}
-									/>
-								</div>
+								<QueryTabsBlock
+									originalQuery={insight.original_query}
+									optimizedQuery={insight.optimized_query}
+								/>
 							)}
 
 							{activeTab === 'recommendations' && (
-								<div className="max-w-4xl">
+								<div className="p-4">
 									<RecommendationList
 										recommendations={insight.recommendations}
 										onRecommendationHover={setActiveRecommendation}

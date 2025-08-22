@@ -7,10 +7,8 @@ import {
 	useNodesState,
 	useEdgesState,
 	type OnConnect,
-	addEdge,
-	Panel
+	addEdge
 } from '@xyflow/react'
-import { RefreshCw } from 'lucide-react'
 import { TableNode, OperationNode, ResultNode } from './CustomNodes'
 import {
 	planGraphAdapter,
@@ -185,19 +183,11 @@ export const FlowCanvas = ({
 					color="#e5e7eb"
 				/>
 				<Controls
+					position="bottom-center"
+					orientation="horizontal"
 					showInteractive={false}
 					className="bg-white border border-gray-300 rounded-lg shadow-sm"
 				/>
-				<Panel position="top-right" className="m-2">
-					<button
-						onClick={loadQueryPlan}
-						disabled={isLoading}
-						className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 text-sm font-medium text-gray-700 disabled:opacity-50"
-					>
-						<RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
-						Reflow Layout
-					</button>
-				</Panel>
 			</ReactFlow>
 		</div>
 	)

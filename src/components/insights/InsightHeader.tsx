@@ -48,73 +48,75 @@ const formatTimeAgo = (dateString?: string): string => {
 
 export const InsightHeader = ({ insight }: InsightHeaderProps) => {
 	return (
-		<div>
-			<div className="flex items-start justify-between">
-				<div className="flex-1">
-					<h1 className="text-3xl font-bold text-gray-900 mb-2">
-						{insight.title}
-					</h1>
-
-					<div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-						<div className="flex items-center gap-1">
-							<Clock size={14} />
-							<span>{formatTimeAgo(insight.created_at)}</span>
-						</div>
-						<div className="flex items-center gap-1">
-							<Tag size={14} />
-							<span className="capitalize">{insight.type} Insight</span>
-						</div>
+		<div className="space-y-6">
+			{/* Title and Metadata */}
+			<div>
+				<h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+					{insight.title}
+				</h3>
+				<div className="flex items-center gap-3 text-xs text-gray-500">
+					<div className="flex items-center gap-1">
+						<Clock size={12} />
+						<span>{formatTimeAgo(insight.created_at)}</span>
 					</div>
-
-					<div className="flex flex-wrap gap-2 mb-4">
-						{insight.optimization_type.map((type) => (
-							<span
-								key={type}
-								className={`inline-flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium border ${getOptimizationColor(
-									type
-								)}`}
-							>
-								{getOptimizationIcon(type)}
-								{type}
-							</span>
-						))}
+					<div className="flex items-center gap-1">
+						<Tag size={12} />
+						<span className="capitalize">{insight.type} Insight</span>
 					</div>
-
-					{insight.estimated_savings && (
-						<div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 border border-green-200">
-							<div className="text-sm font-medium text-gray-700 mb-2">
-								Estimated Impact
-							</div>
-							<div className="flex gap-6">
-								{insight.estimated_savings.cost && (
-									<div className="flex items-center gap-2">
-										<TrendingDown size={16} className="text-green-600" />
-										<span className="text-sm">
-											<span className="font-bold text-green-600 text-lg">
-												{insight.estimated_savings.cost}
-											</span>
-											<span className="text-gray-600 ml-1">cost reduction</span>
-										</span>
-									</div>
-								)}
-								{insight.estimated_savings.performance && (
-									<div className="flex items-center gap-2">
-										<Zap size={16} className="text-blue-600" />
-										<span className="text-sm">
-											<span className="font-bold text-blue-600 text-lg">
-												{insight.estimated_savings.performance}
-											</span>
-											<span className="text-gray-600 ml-1">
-												faster execution
-											</span>
-										</span>
-									</div>
-								)}
-							</div>
-						</div>
-					)}
 				</div>
 			</div>
+
+			{/* Optimization Types */}
+			<div className="flex flex-wrap gap-2">
+				{insight.optimization_type.map((type) => (
+					<span
+						key={type}
+						className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getOptimizationColor(
+							type
+						)}`}
+					>
+						{getOptimizationIcon(type)}
+						{type}
+					</span>
+				))}
+			</div>
+
+			{/* Impact Metrics */}
+			{insight.estimated_savings && (
+				<div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-4 border border-green-200">
+					<div className="text-xs font-medium text-gray-700 mb-3 uppercase tracking-wide">
+						Estimated Impact
+					</div>
+					<div className="space-y-3">
+						{insight.estimated_savings.cost && (
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-2">
+									<div className="w-7 h-7 bg-green-100 rounded-lg flex items-center justify-center">
+										<TrendingDown size={12} className="text-green-600" />
+									</div>
+									<span className="text-xs text-gray-600">Cost Reduction</span>
+								</div>
+								<span className="font-bold text-green-700 text-base">
+									{insight.estimated_savings.cost}
+								</span>
+							</div>
+						)}
+						{insight.estimated_savings.performance && (
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-2">
+									<div className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center">
+										<Zap size={12} className="text-blue-600" />
+									</div>
+									<span className="text-xs text-gray-600">Performance</span>
+								</div>
+								<span className="font-bold text-blue-700 text-base">
+									{insight.estimated_savings.performance}
+								</span>
+							</div>
+						)}
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }
